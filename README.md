@@ -1,5 +1,5 @@
 # Simulacrum
-## A test double framework in C. 
+## A test double framework in C
 
 7th-level illusion
 
