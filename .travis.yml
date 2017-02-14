@@ -7,4 +7,4 @@ before_install:
   - docker build -t simulacrum .
 
 script:
-  - docker run -v $PWD:/root/framework simulacrum /bin/sh -c "cd /root/framework; make check && ./tests/test_suite"
+  - docker run -v $PWD:/root/framework simulacrum /bin/sh -c "cd /root/framework; make && ./tests/test_suite"
