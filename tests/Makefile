@@ -1,11 +1,9 @@
 TARGET = test_suite
-SRCS = test_suite.c acceptance_test_library.c 
+SRCS = test_suite.c acceptance_test_library.c
 OBJS = $(SRCS:.c=.o)
 LIB=../lib/libmock.a
 
 CFLAGS=-std=c99 -Wall
-
-$(info,$(SRCS) $(OBJS))
 
 all: $(TARGET)
 
@@ -13,7 +11,7 @@ all: $(TARGET)
 	gcc $(CFLAGS) -c -o $@ $^
 
 $(TARGET): $(OBJS) $(LIB)
-	gcc $(CFLAGS) -g -o $@ $^ `pkg-config --cflags --libs check` 
+	gcc $(CFLAGS) -o $@ $^ `pkg-config --cflags --libs check`
 
 $(LIB):
 	$(MAKE) -C ../lib
