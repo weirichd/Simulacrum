@@ -26,6 +26,16 @@ START_TEST(it_should_noop_malloc)
 }
 END_TEST
 
+TEST_DOUBLE(free)
+
+START_TEST(it_should_noop_free)
+{
+    char *actual = "hello world";
+
+    free(actual);
+}
+END_TEST
+
 // TODO: Split into separate module, add run flag
 Suite *acceptance_tests()
 {
@@ -36,6 +46,7 @@ Suite *acceptance_tests()
     tc = tcase_create("Core");
 
     tcase_add_test(tc, it_should_noop_malloc);
+    tcase_add_test(tc, it_should_noop_free);
 
     suite_add_tcase(s, tc);
 
