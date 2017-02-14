@@ -11,7 +11,7 @@ all: $(TARGET)
 	gcc $(CFLAGS) -c -o $@ $^
 
 $(TARGET): $(OBJS) $(LIB)
-	gcc $(CFLAGS) -o $@ $^ `pkg-config --cflags --libs check`
+	gcc $(CFLAGS) -o $@ $^ `pkg-config --cflags --libs check` -Wl,--wrap=malloc
 
 $(LIB):
 	$(MAKE) -C ../lib

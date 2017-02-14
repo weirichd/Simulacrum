@@ -1,9 +1,10 @@
 #include <check.h>
 #include <stdlib.h>
-#include "acceptance_test_library.h"
+#include <stdio.h>
 
-// TODO: remove this and implement 
-#define MOCK(...)
+#include "../src/mock.h"
+
+#include "acceptance_test_library.h"
 
 START_TEST(assert_true)
 {
@@ -13,7 +14,7 @@ END_TEST
 
 // Acceptance tests
 
-MOCK(void, malloc, size_t);
+TEST_DOUBLE(malloc)
 
 START_TEST(it_should_noop_malloc)
 {
@@ -24,7 +25,6 @@ START_TEST(it_should_noop_malloc)
     ck_assert_ptr_eq(actual, NULL);
 }
 END_TEST
-
 
 // TODO: Split into separate module, add run flag
 Suite *acceptance_tests()
