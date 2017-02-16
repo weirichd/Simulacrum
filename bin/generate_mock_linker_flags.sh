@@ -1,5 +1,5 @@
 #!/bin/bash
-:
+
 grep "^TEST_DOUBLE(" $1 | \
     awk -F"(" '{print $2}' | \
     awk -F"," '{print $2}' | \
