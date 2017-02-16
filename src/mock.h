@@ -12,7 +12,7 @@ void mock_on(mock_t *mock);
 void mock_off(mock_t *mock);
 int mock_is_enabled(mock_t *mock);
 
-#define TEST_DOUBLE(__return_type, __function_name, _N, ...)                                              \
+#define SIMULACRUM(__return_type, __function_name, _N, ...)                                               \
 mock_t __function_name##_mock = {.on = 1};                                                                \
 typedef void (*__function_name##_mock##_callback)(arg_names_and_type_N(_N, __VA_ARGS__));                 \
 void *__real_##__function_name(arg_names_and_type_N(_N, __VA_ARGS__));                                    \
