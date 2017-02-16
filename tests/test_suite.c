@@ -81,6 +81,28 @@ START_TEST(mock_t_increments_and_gets_call_count)
 }
 END_TEST
 
+START_TEST(mock_t_sets_and_gets_a_str_return_value)
+{
+  mock_t mock = {0};
+  char *expected = "hello world";
+
+  mock_set_return_value(&mock, expected);
+
+  ck_assert_str_eq((char *)mock_get_return_value(&mock), expected);
+}
+END_TEST
+
+START_TEST(mock_t_sets_and_gets_an_int_return_value)
+{
+  mock_t mock = {0};
+  int expected = 10;
+
+  mock_set_return_value(&mock, &expected);
+
+  ck_assert_int_eq(*((int *)mock_get_return_value(&mock)), expected);
+}
+END_TEST
+
 Suite *make_mock_unit_test_suite()
 {
     Suite *s;
@@ -95,6 +117,8 @@ Suite *make_mock_unit_test_suite()
     tcase_add_test(tc, mock_t_dispels_a_mock);
     tcase_add_test(tc, mock_t_enables_a_mock);
     tcase_add_test(tc, mock_t_increments_and_gets_call_count);
+    tcase_add_test(tc, mock_t_sets_and_gets_a_str_return_value);
+    tcase_add_test(tc, mock_t_sets_and_gets_an_int_return_value);
 
     suite_add_tcase(s, tc);
 
@@ -167,6 +191,21 @@ START_TEST(it_should_maintain_a_call_count)
 }
 END_TEST
 
+SIMULACRUM(int, lib_add_two_numbers, 2, int, int)
+
+START_TEST(it_should_allow_custom_return_value)
+{
+    int actual;
+    int expected = 10;
+
+    mock_set_return_value(&lib_add_two_numbers_mock, &expected);
+
+    actual = lib_add_two_numbers(1, 2);
+
+    ck_assert_int_eq(actual, 10);
+}
+END_TEST
+
 // TODO: Split into separate module, add run flag
 Suite *acceptance_tests()
 {
@@ -181,6 +220,7 @@ Suite *acceptance_tests()
     tcase_add_test(tc, it_should_noop_free);
     tcase_add_test(tc, it_should_execute_a_callback);
     tcase_add_test(tc, it_should_maintain_a_call_count);
+    tcase_add_test(tc, it_should_allow_custom_return_value);
 
     suite_add_tcase(s, tc);
 
