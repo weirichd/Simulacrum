@@ -25,3 +25,13 @@ int mock_is_enabled(mock_t *mock)
 {
     return mock->on;
 }
+
+void mock_increment_call_count(mock_t *mock)
+{
+    mock->call_count++;
+}
+
+int mock_get_call_count(mock_t *mock)
+{
+  return mock->call_count;
+}

@@ -13,3 +13,7 @@ void lib_take_an_out_param(char *buf){
     char *str = "hey there";
     memcpy(buf, str, 10);
 }
+
+void lib_do_nothing(void){
+  printf("I do nothing");
+}
