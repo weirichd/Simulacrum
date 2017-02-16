@@ -92,7 +92,7 @@ Suite *make_mock_unit_test_suite()
 
 // Acceptance tests
 
-TEST_DOUBLE(void, malloc, 0)
+SIMULACRUM(void, malloc, 0)
 
 START_TEST(it_should_noop_malloc)
 {
@@ -118,7 +118,7 @@ START_TEST(it_should_disable_noop_and_call_malloc)
 }
 END_TEST
 
-TEST_DOUBLE(void, free, 0)
+SIMULACRUM(void, free, 0)
 
 START_TEST(it_should_noop_free)
 {
@@ -128,7 +128,7 @@ START_TEST(it_should_noop_free)
 }
 END_TEST
 
-TEST_DOUBLE(void, lib_take_an_out_param, 1, char *)
+SIMULACRUM(void, lib_take_an_out_param, 1, char *)
 
 START_TEST(it_should_execute_a_callback)
 {
