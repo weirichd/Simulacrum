@@ -71,6 +71,16 @@ START_TEST(mock_t_enables_a_mock)
 }
 END_TEST
 
+START_TEST(mock_t_increments_and_gets_call_count)
+{
+    mock_t mock = {.call_count = 0};
+
+    mock_increment_call_count(&mock);
+
+    ck_assert_int_eq(mock_get_call_count(&mock), 1);
+}
+END_TEST
+
 Suite *make_mock_unit_test_suite()
 {
     Suite *s;
@@ -84,6 +94,7 @@ Suite *make_mock_unit_test_suite()
     tcase_add_test(tc, mock_t_calls_a_callback);
     tcase_add_test(tc, mock_t_dispels_a_mock);
     tcase_add_test(tc, mock_t_enables_a_mock);
+    tcase_add_test(tc, mock_t_increments_and_gets_call_count);
 
     suite_add_tcase(s, tc);
 
@@ -143,6 +154,19 @@ START_TEST(it_should_execute_a_callback)
 }
 END_TEST
 
+SIMULACRUM(void, lib_do_nothing, 0)
+
+START_TEST(it_should_maintain_a_call_count)
+{
+    lib_do_nothing();
+    lib_do_nothing();
+    lib_do_nothing();
+    lib_do_nothing();
+
+    ck_assert_int_eq(mock_get_call_count(&lib_do_nothing_mock), 4);
+}
+END_TEST
+
 // TODO: Split into separate module, add run flag
 Suite *acceptance_tests()
 {
@@ -156,6 +180,7 @@ Suite *acceptance_tests()
     tcase_add_test(tc, it_should_disable_noop_and_call_malloc);
     tcase_add_test(tc, it_should_noop_free);
     tcase_add_test(tc, it_should_execute_a_callback);
+    tcase_add_test(tc, it_should_maintain_a_call_count);
 
     suite_add_tcase(s, tc);
 

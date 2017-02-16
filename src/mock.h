@@ -4,6 +4,7 @@
 typedef struct mock_s {
     void *callback;
     int on;
+    int call_count;
 } mock_t;
 
 void mock_set_callback(mock_t *mock, void *callback);
@@ -11,15 +12,18 @@ void *mock_get_callback(mock_t *mock);
 void mock_on(mock_t *mock);
 void mock_off(mock_t *mock);
 int mock_is_enabled(mock_t *mock);
+int mock_get_call_count(mock_t *mock);
+void mock_increment_call_count(mock_t *mock);
 
 #define SIMULACRUM(__return_type, __function_name, _N, ...)                                               \
-mock_t __function_name##_mock = {.on = 1};                                                                \
+mock_t __function_name##_mock = {.on = 1, .call_count = 0};                                                                \
 typedef void (*__function_name##_mock##_callback)(arg_names_and_type_N(_N, __VA_ARGS__));                 \
 void *__real_##__function_name(arg_names_and_type_N(_N, __VA_ARGS__));                                    \
 void *__wrap_##__function_name(arg_names_and_type_N(_N, __VA_ARGS__))                                     \
 {                                                                                                         \
   if (mock_is_enabled(&__function_name##_mock))                                                           \
   {                                                                                                       \
+      mock_increment_call_count(&__function_name##_mock);                                                 \
       if (mock_get_callback(&__function_name##_mock))                                                     \
       {                                                                                                   \
         ((__function_name##_mock##_callback)mock_get_callback(&__function_name##_mock))(arg_names_N(_N)); \
