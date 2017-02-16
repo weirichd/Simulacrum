@@ -51,6 +51,45 @@ START_TEST(mock_t_calls_a_callback)
 }
 END_TEST
 
+START_TEST(mock_t_dispels_a_mock)
+{
+    mock_t mock = {.on = 1};
+
+    mock_off(&mock);
+
+    ck_assert_int_eq(mock.on, 0);
+}
+END_TEST
+
+START_TEST(mock_t_enables_a_mock)
+{
+    mock_t mock = {.on = 0};
+
+    mock_on(&mock);
+
+    ck_assert_int_eq(mock.on, 1);
+}
+END_TEST
+
+Suite *make_mock_unit_test_suite()
+{
+    Suite *s;
+    TCase *tc;
+
+    s = suite_create("Mock unit tests");
+    tc = tcase_create("Core");
+
+    tcase_add_test(tc, mock_t_sets_a_callback);
+    tcase_add_test(tc, mock_t_gets_a_callback);
+    tcase_add_test(tc, mock_t_calls_a_callback);
+    tcase_add_test(tc, mock_t_dispels_a_mock);
+    tcase_add_test(tc, mock_t_enables_a_mock);
+
+    suite_add_tcase(s, tc);
+
+    return s;
+}
+
 // Acceptance tests
 
 TEST_DOUBLE(void, malloc, 0)
@@ -62,6 +101,20 @@ START_TEST(it_should_noop_malloc)
     lib_call_that_mallocs(&actual);
 
     ck_assert_ptr_eq(actual, NULL);
+}
+END_TEST
+
+START_TEST(it_should_disable_noop_and_call_malloc)
+{
+    char *actual = {0};
+
+    mock_off(&malloc_mock);
+
+    lib_call_that_mallocs(&actual);
+
+    ck_assert_ptr_ne(actual, NULL);
+
+    free(actual);
 }
 END_TEST
 
@@ -100,25 +153,9 @@ Suite *acceptance_tests()
     tc = tcase_create("Core");
 
     tcase_add_test(tc, it_should_noop_malloc);
+    tcase_add_test(tc, it_should_disable_noop_and_call_malloc);
     tcase_add_test(tc, it_should_noop_free);
     tcase_add_test(tc, it_should_execute_a_callback);
-
-    suite_add_tcase(s, tc);
-
-    return s;
-}
-
-Suite *make_mock_unit_test_suite()
-{
-    Suite *s;
-    TCase *tc;
-
-    s = suite_create("Mock unit tests");
-    tc = tcase_create("Core");
-
-    tcase_add_test(tc, mock_t_sets_a_callback);
-    tcase_add_test(tc, mock_t_gets_a_callback);
-    tcase_add_test(tc, mock_t_calls_a_callback);
 
     suite_add_tcase(s, tc);
 
