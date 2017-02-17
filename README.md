@@ -12,6 +12,12 @@ Components: V, S, M (snow or ice in quantities sufficient to make a life-size co
 
 Duration: Until dispelled
 
+## Prerequisites 
+- gcc
+- Make
+- c99
+- Docker (optional) 
+
 ## Usage
 
 ### Replace a function call with a noop / NULL return
