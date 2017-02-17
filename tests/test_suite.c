@@ -131,7 +131,7 @@ SIMULACRUM(void, malloc, 0)
 
 START_TEST(it_should_noop_malloc)
 {
-    char *actual = {0};
+    char *actual = NULL;
 
     lib_call_that_mallocs(&actual);
 
@@ -206,6 +206,27 @@ START_TEST(it_should_allow_custom_return_value)
 }
 END_TEST
 
+void fill_out_param_callback(char *buf, int size, void *file)
+{
+    char *mock_file_line = "A line in a fake file";
+    memcpy(buf, mock_file_line, size);
+}
+
+SIMULACRUM(void, fgets, 3, char *, int, void *)
+
+START_TEST(it_uses_a_callback_to_set_out_param)
+{
+    int size = 32;
+    char buf[48];
+
+    mock_set_callback(&fgets_mock, &fill_out_param_callback);
+
+    fgets(buf, size, NULL);
+
+    ck_assert_str_eq(buf, "A line in a fake file");
+}
+END_TEST
+
 // TODO: Split into separate module, add run flag
 Suite *acceptance_tests()
 {
@@ -221,6 +242,7 @@ Suite *acceptance_tests()
     tcase_add_test(tc, it_should_execute_a_callback);
     tcase_add_test(tc, it_should_maintain_a_call_count);
     tcase_add_test(tc, it_should_allow_custom_return_value);
+    tcase_add_test(tc, it_uses_a_callback_to_set_out_param);
 
     suite_add_tcase(s, tc);
 
