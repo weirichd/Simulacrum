@@ -15,5 +15,10 @@ void lib_take_an_out_param(char *buf){
 }
 
 void lib_do_nothing(void){
-  printf("I do nothing");
+    printf("I do nothing");
+}
+
+int lib_add_two_numbers(int a, int b)
+{
+    return a + b;
 }
