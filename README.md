@@ -57,11 +57,11 @@ END_TEST
 
 ```
 
-### Add a callback
+### Add a callback / Set a return value 
 
 ```C
 
-SIMULACRUM(void, fgets, 3, char *, int, void *)
+SIMULACRUM(char *, fgets, 3, char *, int, void *)
 
 void fill_out_param_callback(char *buf, int size, void *file)
 {
@@ -73,11 +73,15 @@ START_TEST(it_uses_a_callback_to_set_out_param)
 {
     int size = 32;
     char buf[48];
+    char *rtn = "hello world";
+    char *actual;
 
     mock_set_callback(&fgets_mock, &fill_out_param_callback);
+    mock_set_return_value(&fgets_mock, &rtn);
 
-    fgets(buf, size, NULL);
+    actual = fgets(buf, size, NULL);
 
+    ck_assert_str_eq(actual, "hello world");
     ck_assert_str_eq(buf, "A line in a fake file");
 }
 END_TEST
