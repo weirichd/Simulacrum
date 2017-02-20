@@ -86,9 +86,9 @@ START_TEST(mock_t_sets_and_gets_a_str_return_value)
   mock_t mock = {0};
   char *expected = "hello world";
 
-  mock_set_return_value(&mock, expected);
+  mock_set_return_value(&mock, &expected);
 
-  ck_assert_str_eq((char *)mock_get_return_value(&mock), expected);
+  ck_assert_str_eq(*((char **)mock_get_return_value(&mock)), expected);
 }
 END_TEST
 
@@ -212,17 +212,21 @@ void fill_out_param_callback(char *buf, int size, void *file)
     memcpy(buf, mock_file_line, size);
 }
 
-SIMULACRUM(void, fgets, 3, char *, int, void *)
+SIMULACRUM(char *, fgets, 3, char *, int, void *)
 
 START_TEST(it_uses_a_callback_to_set_out_param)
 {
     int size = 32;
     char buf[48];
+    char *rtn = "hello world";
+    char *actual;
 
     mock_set_callback(&fgets_mock, &fill_out_param_callback);
+    mock_set_return_value(&fgets_mock, &rtn);
 
-    fgets(buf, size, NULL);
+    actual = fgets(buf, size, NULL);
 
+    ck_assert_str_eq(actual, "hello world");
     ck_assert_str_eq(buf, "A line in a fake file");
 }
 END_TEST
