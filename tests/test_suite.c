@@ -103,6 +103,16 @@ START_TEST(mock_t_sets_and_gets_an_int_return_value)
 }
 END_TEST
 
+START_TEST(mock_t_reset_resets_the_call_count)
+{
+  mock_t mock = {.call_count=1};
+
+  mock_reset_call_count(&mock);
+
+  ck_assert_int_eq(mock_get_call_count(&mock), 0);
+}
+END_TEST
+
 Suite *make_mock_unit_test_suite()
 {
     Suite *s;
@@ -119,6 +129,7 @@ Suite *make_mock_unit_test_suite()
     tcase_add_test(tc, mock_t_increments_and_gets_call_count);
     tcase_add_test(tc, mock_t_sets_and_gets_a_str_return_value);
     tcase_add_test(tc, mock_t_sets_and_gets_an_int_return_value);
+    tcase_add_test(tc, mock_t_reset_resets_the_call_count);
 
     suite_add_tcase(s, tc);
 

@@ -30,6 +30,11 @@ void mock_increment_call_count(mock_t *mock)
     mock->call_count++;
 }
 
+void mock_reset_call_count(mock_t *mock)
+{
+    mock->call_count = 0;
+}
+
 int mock_get_call_count(mock_t *mock)
 {
     return mock->call_count;
